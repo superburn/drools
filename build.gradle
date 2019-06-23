@@ -1,0 +1,35 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.6.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    //drools
+	compile ('org.kie:kie-api:7.11.0.Final')
+	compile ('org.kie:kie-spring:7.11.0.Final')
+			{
+				exclude  group:'org.springframework', module:'spring-tx'
+				exclude  group:'org.springframework', module:'spring-beans'
+				exclude  group:'org.springframework', module:'spring-core'
+				exclude  group:'org.springframework', module:'spring-context'
+			}
+	compile ('org.drools:drools-compiler:7.11.0.Final')
+
+	// https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+	compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.15'
+
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

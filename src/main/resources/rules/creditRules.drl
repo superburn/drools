@@ -1,0 +1,44 @@
+package rules;
+import com.example.drools.bean.Person
+
+rule "小于18岁"
+    when
+        person : Person(age < 18)
+    then
+        System.out.println("匹配规则：小于18岁");
+        person.setCredit("0");
+end
+
+
+rule "大于18岁,金融行业,专科 5000"
+    when
+        person : Person(age > 18 , job == "金融", education == "专科")
+    then
+        System.out.println("匹配规则：大于18岁,金融行业,专科 5000");
+        person.setCredit("5000");
+end
+
+rule "大于18岁,金融行业,本科 10000"
+    when
+        person : Person(age > 18 , job == "金融", education == "本科")
+    then
+        System.out.println("匹配规则：大于18岁,金融行业,本科 10000");
+        person.setCredit("10000");
+end
+
+rule "大于18岁,IT行业,专科 15000"
+    when
+        person : Person(age > 18 , job == "IT" , education == "专科")
+    then
+        System.out.println("匹配规则：大于18岁,IT行业,专科 15000");
+        person.setCredit("15000");
+end
+
+
+rule "大于18岁,IT行业,本科 20000"
+    when
+        person : Person(age > 18 , job == "IT" , education == "本科")
+    then
+        System.out.println("匹配规则：大于18岁,IT行业,本科 20000");
+        person.setCredit("20000");
+end
