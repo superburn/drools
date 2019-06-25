@@ -1,5 +1,6 @@
 package com.example.drools.controller;
 
+import com.example.drools.bean.Account;
 import com.example.drools.bean.Person;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
@@ -27,7 +28,7 @@ public class ComputeCredit {
      *      5.大于18岁,IT行业,本科 20000
      *      6.其他条件待审核
      *
-     *      http://localhost:8080/getCredit1?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
+     *      http://localhost:9000/getCredit1?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
      */
     @RequestMapping(value = "/getCredit1")
     @ResponseBody
@@ -60,7 +61,7 @@ public class ComputeCredit {
 
     /**
      * Drools 规则引擎
-     * http://localhost:8080/getCredit2?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
+     * http://localhost:9000/getCredit2?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
      */
     @RequestMapping(value = "/getCredit2")
     @ResponseBody
@@ -82,14 +83,42 @@ public class ComputeCredit {
         return person.getCredit();
     }
 
-
     /**
-     * Groovy脚本动态执行
-     * http://localhost:8080/getCredit3?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
+     * Drools 规则引擎
+     * http://localhost:9000/getCredit3?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
      */
     @RequestMapping(value = "/getCredit3")
     @ResponseBody
     public String getCredit3(@RequestParam (value = "name")String name,
+                             @RequestParam (value = "age")Integer age,
+                             @RequestParam (value = "job")String job,
+                             @RequestParam (value = "education")String education){
+
+        Person person = new Person();
+        person.setName(name);
+        person.setAge(age);
+        person.setJob(job);
+        person.setEducation(education);
+        person.setCredit("审批中");
+        //模拟账户数据
+        Account account = new Account();
+        account.setPersonName(name);
+        account.setScore(500);
+        //使用规则引擎
+        kieSession.insert(person);
+        kieSession.insert(account);
+        //触发规则
+        kieSession.fireAllRules();
+        return person.getCredit();
+    }
+
+    /**
+     * Groovy脚本动态执行
+     * http://localhost:9000/getCredit4?name=test&age=25&job=%E9%87%91%E8%9E%8D&education=%E6%9C%AC%E7%A7%91
+     */
+    @RequestMapping(value = "/getCredit4")
+    @ResponseBody
+    public String getCredit4(@RequestParam (value = "name")String name,
                              @RequestParam (value = "age")Integer age,
                              @RequestParam (value = "job")String job,
                              @RequestParam (value = "education")String education) throws Exception {
